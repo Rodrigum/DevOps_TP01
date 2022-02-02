@@ -1,7 +1,7 @@
-FROM postgres:11.6-alpine
+FROM postgres:11-alpine
 
-RUN CreateScheme.sql
-RUN InsertData.sql
+COPY CreateScheme.sql /docker-entrypoint-initdb.d 
+COPY InsertData.sql /docker-entrypoint-initdb.d
 
 ENV POSTGRES_DB=db \
 POSTGRES_USER=usr \
