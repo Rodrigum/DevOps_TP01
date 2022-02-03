@@ -1,11 +1,13 @@
 version: '3.3'
 services:
   backend:
-    build: ./Backend_API
+    build: ./simple-api/simple-api
     networks:
       - my-network
     depends_on:
       - database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://devopstp01_database_1:5432/db
 
   database:
     build: ./Database
