@@ -19,6 +19,42 @@ docker-compose logs (containers)
 
 ## Why do we put our images into an online repository ?
 Pour pouvoir y accéder depuis plusieurs PC différents et pour qu'une équipe puisse travailler dessus sans soucis
+
+# TP02 :
+
+## What are testcontainers?
+Test library
+
+## Document your Github Actions configurations
+name: CI devops 2022 CPE
+on:
+  #to begin you want to launch this job in main and develop
+  push:
+    branches: #TODO
+      - main
+      - develop
+  pull_request:
+      
+jobs:
+  test-backend:
+    runs-on: ubuntu-18.04
+    steps:
+      #checkout your github code using actions/checkout@v2.3.3
+      - uses: actions/checkout@v2.3.3
+      #do the same with another action (actions/setup-java@v2) that enable to setup jdk 11
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      #finally build your app with the latest command
+      - name: Build and test with Maven
+        run: mvn clean verify --file ./simple-api/simple-api/pom.xml
+
+## For what purpose do we need to push docker images?
+Pour sauvegarder les modifications des images dockers et les utilisés sur n'importe quel poste.
+
+
 # Notes : bdd
 
 Pour que la connection fonctionne :
