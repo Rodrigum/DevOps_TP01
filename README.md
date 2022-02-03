@@ -26,6 +26,8 @@ Pour pouvoir y accéder depuis plusieurs PC différents et pour qu'une équipe p
 Test library
 
 ## Document your Github Actions configurations
+
+``` 
 name: CI devops 2022 CPE
 on:
   #to begin you want to launch this job in main and develop
@@ -50,11 +52,73 @@ jobs:
       #finally build your app with the latest command
       - name: Build and test with Maven
         run: mvn clean verify --file ./simple-api/simple-api/pom.xml
-
+``` 
 ## For what purpose do we need to push docker images?
 Pour sauvegarder les modifications des images dockers et les utilisés sur n'importe quel poste.
 
-
+## Document your quality gate configuration
+``` 
+name: CI devops 2022 CPE
+on:
+  #to begin you want to launch this job in main and develop
+  push:
+    branches: #TODO
+      - main
+      - develop
+  pull_request:
+      
+jobs:
+  test-backend:
+    runs-on: ubuntu-18.04
+    steps:
+      #checkout your github code using actions/checkout@v2.3.3
+      - uses: actions/checkout@v2.3.3
+      #do the same with another action (actions/setup-java@v2) that enable to setup jdk 11
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      #finally build your app with the latest command
+      - name: Build and test with Maven
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=Rodrigum_DevOps_TP01 -Dsonar.organization=rodrigum -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/simple-api/pom.xml
+        #mvn clean verify
+  # define job to build and publish docker image
+  build-and-push-docker-image:
+    needs: test-backend
+    # run only when code is compiling and tests are passing
+    runs-on: ubuntu-latest
+    # steps to perform in job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build image and push backend
+        uses: docker/build-push-action@v2
+        with:
+        # relative path to the place where source code with Dockerfile is located
+          context: ./simple-api/simple-api
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/devops_tp01-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+      - name: Build image and push database
+        uses: docker/build-push-action@v2
+        with:
+        # relative path to the place where source code with Dockerfile is located
+          context: ./Database
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/devops_tp01-database:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v2
+        with:
+        # relative path to the place where source code with Dockerfile is located
+          context: ./HTTP_Server
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/devops_tp01-http_server:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+``` 
 # Notes : bdd
 
 Pour que la connection fonctionne :
