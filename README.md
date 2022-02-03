@@ -1,25 +1,25 @@
 # DevOps_TP01
 
-##Why do we need a volume to be attached to our postgres container ?
+## Why do we need a volume to be attached to our postgres container ?
 
 Pour éviter de perdre les modifications faites à la base de donnée lorsque l'on ferme le terminal.
 
-##Why do we need a multistage build ? And explain each steps of this dockerfile ?
+## Why do we need a multistage build ? And explain each steps of this dockerfile ?
 
 Le build en multistage permet de build et de run l'application avec un seul fichier/pts d'entrée.
 
-##Why do we need a reverse proxy ?
+## Why do we need a reverse proxy ?
 Pour permettre aux utilisateurs de n'avoir accès qu'au site web, sans pouvoir aller voir directement l'API ou la base de donnée. 
 
-##Docker-compose most important commands
+## Docker-compose most important commands
 docker-compose up -d (containers[facultatif])
 docker-compose down (containers)
 docker-compose rm (containers)
 docker-compose logs (containers)
 
-##Why do we put our images into an online repository ?
+## Why do we put our images into an online repository ?
 Pour pouvoir y accéder depuis plusieurs PC différents et pour qu'une équipe puisse travailler dessus sans soucis
-#Notes : bdd
+# Notes : bdd
 
 Pour que la connection fonctionne :
     - newgrp docker
