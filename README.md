@@ -81,6 +81,9 @@ jobs:
           distribution: 'adopt'
       #finally build your app with the latest command
       - name: Build and test with Maven
+        env : 
+          GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN : ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=Rodrigum_DevOps_TP01 -Dsonar.organization=rodrigum -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/simple-api/pom.xml
         #mvn clean verify
   # define job to build and publish docker image
@@ -118,6 +121,7 @@ jobs:
           # Note: tags has to be all lower-case
           tags: ${{secrets.DOCKERHUB_USERNAME}}/devops_tp01-http_server:latest
           push: ${{ github.ref == 'refs/heads/main' }}
+
 ``` 
 # Notes : bdd
 
