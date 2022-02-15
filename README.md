@@ -23,7 +23,7 @@ Pour pouvoir y accéder depuis plusieurs PC différents et pour qu'une équipe p
 # TP02 :
 
 ## What are testcontainers?
-Test library
+Classe java permettant de faire des tests unitaires
 
 ## Document your Github Actions configurations
 
